@@ -34,31 +34,12 @@ class HomeViewSet(viewsets.ViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def list(self, request):
-        content = {'message': 'Hello, World!'}
-        return Response(content)
-    
-    # Nếu bạn cần thêm các method khác:
-    def retrieve(self, request, pk=None):
-        return Response({'message': f'Hello, {pk}!'})
-
-    def create(self, request):
-        return Response({'message': 'Created!'})
-
-    def update(self, request, pk=None):
-        return Response({'message': f'Updated {pk}!'})
-
-    def partial_update(self, request, pk=None):
-        return Response({'message': f'Partially updated {pk}!'})
-
-    def destroy(self, request, pk=None):
-        return Response({'message': f'Deleted {pk}!'})
-
-    # Custom actions
     @action(detail=False, methods=['get'])
-    def custom_action(self, request):
-        return Response({'message': 'Custom action!'})
-
-    @action(detail=True, methods=['post'])
-    def custom_detail_action(self, request, pk=None):
-        return Response({'message': f'Custom action for {pk}!'})
+    def getInfoUser(self, request):
+            # Kiểm tra xem người dùng có tồn tại hay không
+        user = request.user
+        if user.is_authenticated:
+            serializer = UserSerializer(user)
+            return Response(serializer.data)
+        else:
+            return Response({"error": "User not authenticated"}, status=401)
