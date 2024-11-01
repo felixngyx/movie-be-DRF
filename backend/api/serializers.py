@@ -24,7 +24,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         if not any(char.isupper() for char in attrs['password']):
             raise serializers.ValidationError({"password": "Password must contain at least one uppercase letter."})
 
-        if not any(not char.isalnum() for char in attrs['Password']):
+        if not any(not char.isalnum() for char in attrs['password']):
             raise serializers.ValidationError({"password":"Password must contain at least one character!"})
         return attrs
     
