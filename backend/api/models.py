@@ -18,10 +18,14 @@ class User(AbstractUser):
 
 class Channel(models.Model):
     name = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
-    banner = models.CharField(max_length=255, blank=True, null=True)
-    created_at = models.DateTimeField(default=timezone.now)
+    description = models.TextField(null=True, blank=True)
+    logo_url = models.URLField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         db_table = 'channels'
@@ -43,6 +47,7 @@ class Movie(models.Model):
     date = models.CharField(max_length=255, blank=True, null=True)
     channel = models.ForeignKey(Channel, related_name='movies', on_delete=models.CASCADE)
     genres = models.ManyToManyField(Genre, through='MovieGenre', related_name='movies')
+    duration = models.IntegerField(default=0)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 
